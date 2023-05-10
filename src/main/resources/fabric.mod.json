@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "id": "${id}",
+  "name": "${name}",
+  "description": "${description}",
+  "icon": "assets/CompactSpawners/icon/icon.png",
+  "contact": {
+    "issues": "https://github.com/btwonion/CompactSpawners/issues",
+    "sources": "https://github.com/btwonion/CompactSpawners"
+  },
+  "authors": [
+    {
+      "name": "btwonion"
+    }
+  ],
+  "contributors": [],
+  "license": ["GNU General Public License v3.0"],
+  "version": "${version}",
+  "environment": "*",
+  "depends": {
+    "fabric-language-kotlin": ">=1.9.4+kotlin.1.8.21",
+    "fabric-api": ">=0.79.0+1.19.4",
+    "minecraft": ">=1.19.4"
+  },
+  "suggests": {
+    "modmenu": ">=4.0.6"
+  },
+  "entrypoints": {
+    "main": [
+      {
+        "adapter": "kotlin",
+        "value": "dev.nyon.moredetails.MainKt::init"
+      }
+    ],
+    "modmenu": [
+      {
+        "adapter": "kotlin",
+        "value": "dev.nyon.moredetails.config.ModMenuImpl"
+      }
+    ]
+  },
+  "mixins": [
+    "CompactSpawners.mixins.json"
+  ],
+  "custom": {
+    "modmenu" : {
+      "links": {
+        "modmenu.discord": "https://discord.gg/pmHTtZnMd3"
+      }
+    }
+  }
+}
