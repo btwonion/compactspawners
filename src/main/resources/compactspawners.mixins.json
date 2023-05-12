@@ -4,6 +4,7 @@
   "package": "dev.nyon.compactspawners.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "SpawnerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

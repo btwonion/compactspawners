@@ -43,8 +43,8 @@ dependencies {
 
 tasks {
     processResources {
-        val modId = "CompactSpawners"
-        val modName = modId
+        val modId = "compactspawners"
+        val modName = "CompactSpawners"
         val modDescription = "Fabric/Quilt mod which allows you to use spawners as a fully automatic farm"
 
         inputs.property("id", modId)

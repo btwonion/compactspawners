@@ -3,7 +3,6 @@
   "id": "${id}",
   "name": "${name}",
   "description": "${description}",
-  "icon": "assets/CompactSpawners/icon/icon.png",
   "contact": {
     "issues": "https://github.com/btwonion/CompactSpawners/issues",
     "sources": "https://github.com/btwonion/CompactSpawners"
@@ -30,18 +29,18 @@
     "main": [
       {
         "adapter": "kotlin",
-        "value": "dev.nyon.moredetails.MainKt::init"
+        "value": "dev.nyon.compactspawners.CompactSpawners"
       }
     ],
     "modmenu": [
       {
         "adapter": "kotlin",
-        "value": "dev.nyon.moredetails.config.ModMenuImpl"
+        "value": "dev.nyon.compactspawners.config.ModMenuImpl"
       }
     ]
   },
   "mixins": [
-    "CompactSpawners.mixins.json"
+    "compactspawners.mixins.json"
   ],
   "custom": {
     "modmenu" : {
