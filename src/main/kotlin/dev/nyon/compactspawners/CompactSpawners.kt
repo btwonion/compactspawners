@@ -24,7 +24,9 @@ val json = Json {
 }
 
 @Suppress("unused")
-class CompactSpawners : ModInitializer {
+object CompactSpawners : ModInitializer {
+    const val modID = "compactspawners"
+
     override fun onInitialize() {
         loadConfig()
         handleSpawnerLootTable()
