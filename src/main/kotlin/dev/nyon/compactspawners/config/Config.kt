@@ -19,7 +19,7 @@ data class Config(
 )
 
 var config = Config()
-private val path = FabricLoader.getInstance().configDir.toAbsolutePath().resolve("moredetails.json")
+private val path = FabricLoader.getInstance().configDir.toAbsolutePath().resolve("compactspawners.json")
     .also { if (!it.exists()) it.createFile() }
 
 fun saveConfig() = path.writeText(json.encodeToString(config))
