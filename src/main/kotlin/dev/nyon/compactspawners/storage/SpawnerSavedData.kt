@@ -53,8 +53,8 @@ class SpawnerSavedData(level: ServerLevel) : SavedData() {
                 )
             }
             dimensionStorages.add(DimensionStorage(ResourceLocation(dimension), list.toMutableList()))
-
         }
+
         return this
     }
 
