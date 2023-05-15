@@ -12,10 +12,11 @@ import kotlin.io.path.writeText
 
 @Serializable
 data class Config(
-    var maxMergedSpawners: Int = -1,
+    var maxMergedSpawners: Int = 6 * 9,
     var maxStoredExp: Int = -1,
-    var maxStoredDrops: Int = -1,
-    var silkBreakSpawners: Boolean = true
+    var maxStoredDrops: Int = 6 * 9,
+    var silkBreakSpawners: Boolean = true,
+    var requiredPlayerRange: Int = 32
 )
 
 var config = Config()

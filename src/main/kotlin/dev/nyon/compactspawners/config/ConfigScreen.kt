@@ -40,4 +40,10 @@ fun generateGeneralCategory(): ConfigCategory = ConfigCategory.createBuilder().n
             .binding(config.silkBreakSpawners, { config.silkBreakSpawners }, { config.silkBreakSpawners = it })
             .controller(::TickBoxController).build()
     )
+    .option(
+        Option.createBuilder(Int::class.java).name(Component.literal("Required players range"))
+            .tooltip(Component.literal("Decides in which range a player should stand nearby a spawner to spawn mobs"))
+            .binding(config.requiredPlayerRange, { config.requiredPlayerRange }, { config.requiredPlayerRange = it })
+            .controller(::IntegerFieldController).build()
+    )
     .build()
