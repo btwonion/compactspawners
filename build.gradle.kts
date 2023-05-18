@@ -38,6 +38,7 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.79.0+1.19.4")
     modImplementation("net.fabricmc:fabric-language-kotlin:1.9.4+kotlin.1.8.21")
     modImplementation("dev.isxander.yacl:yet-another-config-lib-fabric:2.5.0+1.19.4")
+    modImplementation("net.silkmc:silk-igui:1.9.8")
     modApi("com.terraformersmc:modmenu:6.2.0")
 }
 
