@@ -2,6 +2,7 @@ package dev.nyon.compactspawners
 
 import dev.nyon.compactspawners.config.config
 import dev.nyon.compactspawners.config.loadConfig
+import dev.nyon.compactspawners.config.saveConfig
 import kotlinx.serialization.json.Json
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents
@@ -25,11 +26,16 @@ val json = Json {
 
 @Suppress("unused")
 object CompactSpawners : ModInitializer {
+    @Suppress("SpellCheckingInspection")
     const val modID = "compactspawners"
 
     override fun onInitialize() {
         loadConfig()
         handleSpawnerLootTable()
+    }
+
+    fun shutdown() {
+        saveConfig()
     }
 
     private fun handleSpawnerLootTable() {
