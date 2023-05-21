@@ -46,4 +46,10 @@ fun generateGeneralCategory(): ConfigCategory = ConfigCategory.createBuilder().n
             .binding(config.requiredPlayerRange, { config.requiredPlayerRange }, { config.requiredPlayerRange = it })
             .controller(::IntegerFieldController).build()
     )
+    .option(
+        Option.createBuilder(Int::class.java).name(Component.literal("Mobs per spawner"))
+            .tooltip(Component.literal("Decides how many mobs there should 'spawn' per period"))
+            .binding(config.mobsPerSpawner, { config.mobsPerSpawner }, { config.mobsPerSpawner = it })
+            .controller(::IntegerFieldController).build()
+    )
     .build()

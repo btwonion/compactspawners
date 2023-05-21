@@ -12,14 +12,16 @@ import kotlin.io.path.writeText
 
 @Serializable
 data class Config(
-    var maxMergedSpawners: Int = 6 * 9,
+    var maxMergedSpawners: Int = -1,
     var maxStoredExp: Int = -1,
-    var maxStoredDrops: Int = 6 * 9,
+    var maxStoredDrops: Int = -1,
     var silkBreakSpawners: Boolean = true,
-    var requiredPlayerRange: Int = 32
+    var requiredPlayerRange: Int = 32,
+    var mobsPerSpawner: Int = 4
 )
 
 var config = Config()
+@Suppress("SpellCheckingInspection")
 private val path = FabricLoader.getInstance().configDir.toAbsolutePath().resolve("compactspawners.json")
     .also { if (!it.exists()) it.createFile() }
 
