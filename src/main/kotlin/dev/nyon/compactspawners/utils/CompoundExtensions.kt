@@ -3,9 +3,25 @@ package dev.nyon.compactspawners.utils
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.world.item.ItemStack
+import java.util.ArrayList
 
-fun List<ItemStack>.toTagList() = this.run {
-    ListTag().apply { this@apply.addAll(this@run.map { it.tag }) }
+fun CompoundTag.loadAllItems(key: String, list: ArrayList<ItemStack>) {
+    val listTag: ListTag = this.getList(key, 10)
+
+    listTag.indices.forEach {
+        val compoundTag = listTag.getCompound(it)
+        list.add(ItemStack.of(compoundTag))
+    }
 }
 
-fun ListTag.toItemList() = this.map { ItemStack.of(it as CompoundTag) }
+fun CompoundTag.saveAllItems(key: String, list: ArrayList<ItemStack>) {
+    val listTag = ListTag()
+
+    list.forEach {
+        val compoundTag = CompoundTag()
+        it.save(compoundTag)
+        listTag.add(compoundTag)
+    }
+
+    this.put(key, listTag)
+}

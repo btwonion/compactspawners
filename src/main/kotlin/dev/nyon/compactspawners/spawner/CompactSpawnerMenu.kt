@@ -1,8 +1,7 @@
 package dev.nyon.compactspawners.spawner
 
 import net.minecraft.network.chat.Component
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.ItemStack
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.Block
 import net.silkmc.silk.core.entity.blockPos
@@ -15,16 +14,16 @@ import net.silkmc.silk.igui.*
 import net.silkmc.silk.igui.observable.GuiMutableList
 import net.silkmc.silk.igui.observable.asGuiList
 
-fun openCompactSpawnerGUI(player: Player, block: CompactSpawnerTickInterface) {
-    igui(GuiType.NINE_BY_SIX, "CompactSpawner".literal, "main") {
-        page("main") {
+fun openCompactSpawnerGUI(player: ServerPlayer, block: CompactSpawnerTickInterface) {
+    val gui = igui(GuiType.NINE_BY_SIX, "CompactSpawner".literal, 1) {
+        page(1) {
             placeholder(Slots.All, Items.CYAN_STAINED_GLASS_PANE.guiIcon)
 
             placeholder(Slots.RowOne, Items.ORANGE_STAINED_GLASS_PANE.guiIcon)
             placeholder(Slots.RowSix, Items.ORANGE_STAINED_GLASS_PANE.guiIcon)
             placeholder(Slots.Corners, Items.ORANGE_STAINED_GLASS_PANE.guiIcon)
 
-            button(2 sl 2, itemStack(Items.EXPERIENCE_BOTTLE) {
+            button(4 sl 3, itemStack(Items.EXPERIENCE_BOTTLE) {
                 setCustomName("Stored exp") { color = ItemColors.NameColor }
                 setLore(
                     listOf(
@@ -38,7 +37,7 @@ fun openCompactSpawnerGUI(player: Player, block: CompactSpawnerTickInterface) {
                 block.exp = 0
             }
 
-            changePageByKey(5 sl 2, itemStack(Items.SPAWNER) {
+            changePageByKey(3 sl 5, itemStack(Items.SPAWNER) {
                 setCustomName("Spawners") { color = ItemColors.NameColor }
                 setLore(listOf(
                     literalText("Spawners: ${block.spawners.sumOf { it.count }}") {
@@ -47,9 +46,9 @@ fun openCompactSpawnerGUI(player: Player, block: CompactSpawnerTickInterface) {
                     Component.empty(),
                     literalText("Click to open spawner inventory!") { color = ItemColors.ActionLoreColor })
                 )
-            }.guiIcon, "spawners")
+            }.guiIcon, 2)
 
-            changePageByKey(8 sl 2, itemStack(Items.IRON_SWORD) {
+            changePageByKey(4 sl 7, itemStack(Items.IRON_SWORD) {
                 setCustomName("Drops") { color = ItemColors.NameColor }
                 setLore(listOf(
                     literalText("Items: ${block.mobDrops.sumOf { it.count }}") {
@@ -58,13 +57,13 @@ fun openCompactSpawnerGUI(player: Player, block: CompactSpawnerTickInterface) {
                     Component.empty(),
                     literalText("Click to open drops inventory!") { color = ItemColors.ActionLoreColor })
                 )
-            }.guiIcon, "drops")
+            }.guiIcon, 3)
         }
 
-        page("spawners") {
+        page(2) {
             createCompoundTheme()
 
-            val compound = compound((2 sl 2) rectTo (8 sl 5), block.spawners.asGuiList(), { it }) { event, element ->
+            val compound = compound((2 sl 2) rectTo (5 sl 8), block.spawners.asGuiList(), { it }) { event, element ->
                 if (!event.player.addItem(element)) Block.popResource(
                     event.player.level,
                     event.player.blockPos,
@@ -74,12 +73,12 @@ fun openCompactSpawnerGUI(player: Player, block: CompactSpawnerTickInterface) {
             createCompoundScroller(compound)
         }
 
-        page("drops") {
+        page(3) {
             createCompoundTheme()
 
-            val list = GuiMutableList<ItemStack>(block.mobDrops)
+            val list = GuiMutableList(block.mobDrops.toMutableList())
 
-            val compound = compound((2 sl 2) rectTo (8 sl 5), list, { it }) { event, element ->
+            val compound = compound((2 sl 2) rectTo (5 sl 8), list, { it }) { event, element ->
                 //TODO allow mutations!!!!
                 if (!event.player.addItem(element)) Block.popResource(
                     event.player.level,
@@ -89,7 +88,9 @@ fun openCompactSpawnerGUI(player: Player, block: CompactSpawnerTickInterface) {
             }
             createCompoundScroller(compound)
         }
-    }.startOpen(player)
+    }
+
+    player.openGui(gui, 1)
 }
 
 private fun GuiBuilder.PageBuilder.createCompoundTheme() {
@@ -98,18 +99,17 @@ private fun GuiBuilder.PageBuilder.createCompoundTheme() {
     changePageByKey(6 sl 1, itemStack(Items.ARROW) {
         setCustomName("Back") { color = ItemColors.NameColor }
         setLore(listOf(literalText("Click to go back to the main page!") { color = ItemColors.ActionLoreColor }))
-    }.guiIcon, "main")
+    }.guiIcon, 1)
 }
 
 private fun GuiBuilder.PageBuilder.createCompoundScroller(compound: GuiCompound<*>) {
-    compoundScroll(9 sl 6, itemStack(Items.LIGHTNING_ROD) {
+    compoundScroll(6 sl 9, itemStack(Items.LIGHTNING_ROD) {
         setCustomName("Scroll") { color = ItemColors.NameColor }
-        setLore(
-            listOf(
-                literalText("Left Click - Up") { color = ItemColors.InfoLoreColor },
-                literalText("Right Click - Down") { color = ItemColors.InfoLoreColor }
-            )
-        )
+        setLore(listOf(literalText("Click to scroll up!") { color = ItemColors.InfoLoreColor }))
+    }.guiIcon, compound, true)
+    compoundScroll(1 sl 9, itemStack(Items.LIGHTNING_ROD) {
+        setCustomName("Scroll") { color = ItemColors.NameColor }
+        setLore(listOf(literalText("Click to scroll down!") { color = ItemColors.InfoLoreColor }))
     }.guiIcon, compound, false)
 }
 
