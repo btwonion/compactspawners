@@ -10,5 +10,5 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface MobAccessor {
 
     @Invoker("createLootContext")
-    LootContext.Builder createLootContext(boolean hitByPlayer, DamageSource damageSource);
+    LootContext.Builder invokeCreateLootContext(boolean hitByPlayer, DamageSource damageSource);
 }
