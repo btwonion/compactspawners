@@ -1,4 +1,4 @@
-rootProject.name = "CompactSpawners"
+rootProject.name = "compactspawners"
 
 pluginManagement {
     repositories {

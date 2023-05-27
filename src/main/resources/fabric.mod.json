@@ -4,8 +4,8 @@
   "name": "${name}",
   "description": "${description}",
   "contact": {
-    "issues": "https://github.com/btwonion/CompactSpawners/issues",
-    "sources": "https://github.com/btwonion/CompactSpawners"
+    "issues": "https://github.com/btwonion/compactspawners/issues",
+    "sources": "https://github.com/btwonion/compactspawners"
   },
   "authors": [
     {

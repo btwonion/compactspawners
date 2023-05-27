@@ -14,12 +14,12 @@ plugins {
 }
 
 group = "dev.nyon"
-val majorVersion = "1.0.1"
+val majorVersion = "1.0.0"
 val mcVersion = "1.19.4"
 version = "$majorVersion-$mcVersion"
 description = "Fabric/Quilt mod which allows you to use spawners as a fully automatic farm"
 val authors = listOf("btwonion")
-val githubRepo = "btwonion/CompactSpawners"
+val githubRepo = "btwonion/compactspawners"
 
 repositories {
     mavenCentral()
@@ -45,12 +45,11 @@ dependencies {
 tasks {
     processResources {
         val modId = "compactspawners"
-        val modName = "CompactSpawners"
         val modDescription = "Fabric/Quilt mod which allows you to use spawners as a fully automatic farm"
 
         inputs.property("id", modId)
         inputs.property("group", project.group)
-        inputs.property("name", modName)
+        inputs.property("name", modId)
         inputs.property("description", modDescription)
         inputs.property("version", project.version)
         inputs.property("github", githubRepo)
@@ -59,7 +58,7 @@ tasks {
             expand(
                 "id" to modId,
                 "group" to project.group,
-                "name" to modName,
+                "name" to modId,
                 "description" to modDescription,
                 "version" to project.version,
                 "github" to githubRepo,
@@ -128,7 +127,7 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = "dev.nyon"
-            artifactId = "CompactSpawners"
+            artifactId = "compactspawners"
             version = project.version.toString()
             from(components["java"])
         }
