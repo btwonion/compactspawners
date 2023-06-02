@@ -34,11 +34,10 @@ dependencies {
         parchment("org.parchmentmc.data:parchment-1.19.3:2023.03.12@zip")
         officialMojangMappings()
     })
-    modImplementation("net.fabricmc:fabric-loader:0.14.20")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.81.1+1.19.4")
+    modImplementation("net.fabricmc:fabric-loader:0.14.21")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.83.0+1.19.4")
     modImplementation("net.fabricmc:fabric-language-kotlin:1.9.4+kotlin.1.8.21")
     modImplementation("dev.isxander.yacl:yet-another-config-lib-fabric:2.5.0+1.19.4")
-    modImplementation("net.silkmc:silk-igui:1.9.8")
     modApi("com.terraformersmc:modmenu:6.2.0")
 }
 
