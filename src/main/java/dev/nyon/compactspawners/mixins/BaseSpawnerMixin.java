@@ -2,10 +2,7 @@ package dev.nyon.compactspawners.mixins;
 
 import dev.nyon.compactspawners.spawner.CompactSpawnerBlock;
 import dev.nyon.compactspawners.spawner.CompactSpawnerTickInterface;
-import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.entity.FakePlayer;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;

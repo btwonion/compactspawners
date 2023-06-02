@@ -1,7 +1,8 @@
 package dev.nyon.compactspawners.mixins;
 
-import dev.nyon.compactspawners.spawner.CompactSpawnerMenuKt;
 import dev.nyon.compactspawners.spawner.CompactSpawnerTickInterface;
+import dev.nyon.compactspawners.spawner.menu.CSMenuScreen;
+import dev.nyon.compactspawners.spawner.menu.CompactSpawnerMenuProvider;
 import dev.nyon.compactspawners.utils.CompoundExtensionsKt;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -72,10 +73,11 @@ public class SpawnerBlockEntityMixin extends BlockEntity implements CompactSpawn
             activated = false;
             return;
         }
-        if (!(player instanceof ServerPlayer serverPlayer)) return;
+        if (!(player instanceof ServerPlayer)) return;
 
         activated = true;
-        CompactSpawnerMenuKt.openCompactSpawnerGUI(serverPlayer, this);
+        var menuProvider = new CompactSpawnerMenuProvider(this, CSMenuScreen.Start);
+        player.openMenu(menuProvider);
     }
 
     @Override

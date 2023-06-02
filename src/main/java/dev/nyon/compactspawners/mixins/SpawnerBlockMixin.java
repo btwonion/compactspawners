@@ -63,8 +63,6 @@ public class SpawnerBlockMixin extends BaseEntityBlock {
         ItemStack stack,
         boolean dropExperience
     ) {
-        super.spawnAfterBreak(state, level, pos, stack, dropExperience);
-
         if (dropExperience && !EnchantmentHelper.hasSilkTouch(stack)) {
             var i = 15 + level.random.nextInt(15) + level.random.nextInt(15);
             popExperience(level, pos, i);
