@@ -3,6 +3,7 @@
 
 This is accomplished via merged spawners and automatic mob killing and storing
 
+## Other
 ⚠️ The development version is always the latest stable release of minecraft. 
 Therefore new features will only be available for the current and following minecraft versions.
 
