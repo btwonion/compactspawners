@@ -49,8 +49,6 @@ public class SpawnerBlockEntityMixin extends BlockEntity implements CompactSpawn
         CompoundExtensionsKt.loadAllItems(tag, "drops", mobDrops);
         CompoundExtensionsKt.loadAllItems(tag, "spawners", spawners);
         exp = tag.getInt("exp");
-
-        System.out.println("loaded " + tag.toString());
     }
 
     @Inject(
@@ -62,8 +60,6 @@ public class SpawnerBlockEntityMixin extends BlockEntity implements CompactSpawn
         CompoundExtensionsKt.saveAllItems(tag, "drops", mobDrops);
         CompoundExtensionsKt.saveAllItems(tag, "spawners", spawners);
         tag.putInt("exp", exp);
-
-        System.out.println("saved" + tag.toString());
     }
 
     @Override
@@ -76,7 +72,7 @@ public class SpawnerBlockEntityMixin extends BlockEntity implements CompactSpawn
         if (!(player instanceof ServerPlayer)) return;
 
         activated = true;
-        var menuProvider = new CompactSpawnerMenuProvider(this, CSMenuScreen.Start);
+        var menuProvider = new CompactSpawnerMenuProvider(this, getBlockPos(), CSMenuScreen.Start);
         player.openMenu(menuProvider);
     }
 

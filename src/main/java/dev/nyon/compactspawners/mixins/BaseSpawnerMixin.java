@@ -2,6 +2,8 @@ package dev.nyon.compactspawners.mixins;
 
 import dev.nyon.compactspawners.spawner.CompactSpawnerBlock;
 import dev.nyon.compactspawners.spawner.CompactSpawnerTickInterface;
+import dev.nyon.compactspawners.spawner.menu.CSMenuScreen;
+import dev.nyon.compactspawners.spawner.menu.CompactSpawnerMenu;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -23,6 +25,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import static dev.nyon.compactspawners.config.ConfigKt.getConfig;
@@ -68,7 +71,7 @@ public abstract class BaseSpawnerMixin {
         BlockEntity rawEntity = serverLevel.getBlockEntity(pos);
         CompactSpawnerTickInterface compactSpawnerData = (CompactSpawnerTickInterface) rawEntity;
         int mobsToSpawn = getConfig().getMobsPerSpawner() * (compactSpawnerData.getSpawners().size() + 1);
-        System.out.println(mobsToSpawn);
+
         for (int i = 0; i <= mobsToSpawn; i++) {
             if (!(entityType.get().create(serverLevel) instanceof Mob mob)) {
                 ci.cancel();
@@ -82,6 +85,7 @@ public abstract class BaseSpawnerMixin {
             lootTable.getRandomItems(lootContextBuilder.create(LootContextParamSets.ENTITY), itemStack -> compactSpawnerData.setMobDrops(CompactSpawnerBlock.INSTANCE.handleNewDrop(itemStack, compactSpawnerData.getMobDrops(), serverLevel, pos)));
 
             compactSpawnerData.setExp(CompactSpawnerBlock.INSTANCE.handleNewExp(mob.getExperienceReward(), compactSpawnerData.getExp(), pos, serverLevel));
+            CompactSpawnerMenu.Companion.reloadPages(pos, Arrays.asList(CSMenuScreen.Drops, CSMenuScreen.Start));
         }
 
         rawEntity.setChanged();
