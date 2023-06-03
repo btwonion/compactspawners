@@ -25,9 +25,11 @@ public class ItemMixin {
     public void getName(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced, CallbackInfo ci) {
         CompoundTag tag = stack.getTag();
         if (stack.getItem() != Items.SPAWNER || tag == null) return;
-        String[] entityParts = tag.getCompound("BlockEntityTag")
+        CompoundTag entityTag = tag.getCompound("BlockEntityTag")
             .getCompound("SpawnData")
-            .getCompound("entity")
+            .getCompound("entity");
+        if (entityTag.isEmpty()) return;
+        String[] entityParts = entityTag
             .getString("id")
             .split(":")[1]
             .split("_");
