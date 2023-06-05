@@ -9,6 +9,7 @@ This is accomplished via merged spawners and automatic mob killing and storing
 - optional custom gui
 - fix glass panes moving out of the inventory
 - improve design
+- fixing the gui would be nice too :)
 
 ## Other
 ⚠️ The development version is always the latest stable release of minecraft. 
