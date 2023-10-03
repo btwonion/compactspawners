@@ -1,13 +1,15 @@
 @file:Suppress("SpellCheckingInspection")
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.nio.file.Path
+import kotlin.io.path.notExists
+import kotlin.io.path.readText
 
 plugins {
-    kotlin("jvm") version "1.8.21"
-    kotlin("plugin.serialization") version "1.8.21"
-    id("fabric-loom") version "1.2-SNAPSHOT"
-    id("io.github.juuxel.loom-quiltflower") version "1.8.0"
+    kotlin("jvm") version "1.9.10"
+    kotlin("plugin.serialization") version "1.9.10"
+    id("fabric-loom") version "1.4-SNAPSHOT"
 
-    id("com.modrinth.minotaur") version "2.7.5"
+    id("com.modrinth.minotaur") version "2.8.4"
     id("com.github.breadmoirai.github-release") version "2.4.1"
     `maven-publish`
     signing
@@ -15,7 +17,7 @@ plugins {
 
 group = "dev.nyon"
 val majorVersion = "1.0.0"
-val mcVersion = "1.19.4"
+val mcVersion = "1.20.2"
 version = "$majorVersion-$mcVersion"
 description = "Fabric/Quilt mod which allows you to use spawners as a fully automatic farm"
 val authors = listOf("btwonion")
@@ -31,13 +33,13 @@ repositories {
 dependencies {
     minecraft("com.mojang:minecraft:$mcVersion")
     mappings(loom.layered {
-        parchment("org.parchmentmc.data:parchment-1.19.3:2023.03.12@zip")
+        parchment("org.parchmentmc.data:parchment-1.20.1:2023.09.03@zip")
         officialMojangMappings()
     })
-    modImplementation("net.fabricmc:fabric-loader:0.14.21")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.83.0+1.19.4")
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.9.4+kotlin.1.8.21")
-    modImplementation("dev.isxander.yacl:yet-another-config-lib-fabric:2.5.0+1.19.4")
+    modImplementation("net.fabricmc:fabric-loader:0.14.22")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.89.3+$mcVersion")
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.10.10+kotlin.1.9.10")
+    modImplementation("dev.isxander.yacl:yet-another-config-lib-fabric:3.0.3+1.20")
     modApi("com.terraformersmc:modmenu:6.2.0")
 }
 
@@ -47,20 +49,16 @@ tasks {
         val modDescription = "Fabric/Quilt mod which allows you to use spawners as a fully automatic farm"
 
         inputs.property("id", modId)
-        inputs.property("group", project.group)
         inputs.property("name", modId)
         inputs.property("description", modDescription)
         inputs.property("version", project.version)
-        inputs.property("github", githubRepo)
 
         filesMatching("fabric.mod.json") {
             expand(
                 "id" to modId,
-                "group" to project.group,
                 "name" to modId,
                 "description" to modDescription,
-                "version" to project.version,
-                "github" to githubRepo,
+                "version" to project.version.toString()
             )
         }
     }
@@ -73,23 +71,32 @@ tasks {
         dependsOn("githubRelease")
         dependsOn("publish")
     }
+
+    withType<JavaCompile> {
+        options.release.set(17)
+    }
+
+    withType<KotlinCompile> {
+        kotlinOptions.jvmTarget = "17"
+    }
 }
-val changelogText =
-    file("changelogs/$majorVersion.md").takeIf { it.exists() }?.readText() ?: "No changelog provided."
+val changelogFile: Path = rootDir.toPath().resolve("changelogs/fabric-$version.md")
+val changelogText = if (changelogFile.notExists()) "" else changelogFile.readText()
 
 modrinth {
     token.set(findProperty("modrinth.token")?.toString())
-    projectId.set("KRVzVd0T")
+    projectId.set("LLfA8jAD")
     versionNumber.set(project.version.toString())
+    versionName.set(project.version.toString())
     versionType.set("release")
     uploadFile.set(tasks["remapJar"])
-    gameVersions.set(listOf(mcVersion))
+    gameVersions.set(listOf("1.20.2"))
     loaders.set(listOf("fabric", "quilt"))
     dependencies {
         required.project("fabric-api")
         required.project("fabric-language-kotlin")
         required.project("yacl")
-        optional.project("modmenu")
+        required.project("modmenu")
     }
     changelog.set(changelogText)
     syncBodyFrom.set(file("README.md").readText())
@@ -101,15 +108,11 @@ githubRelease {
     val split = githubRepo.split("/")
     owner(split[0])
     repo(split[1])
-    tagName("v${project.version}")
+    releaseName(project.version.toString())
+    tagName(project.version.toString())
     body(changelogText)
-    overwrite(true)
-    releaseAssets(tasks["remapJar"].outputs.files)
     targetCommitish("master")
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "17"
+    setReleaseAssets(tasks["remapJar"])
 }
 
 publishing {
@@ -135,4 +138,8 @@ publishing {
 
 java {
     withSourcesJar()
+}
+
+signing {
+    sign(publishing.publications)
 }
