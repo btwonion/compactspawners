@@ -1,0 +1,14 @@
+{
+  "menu.compactspawners.name": "CompactSpawners",
+  "menu.compactspawners.general.name": "General",
+  "menu.compactspawners.general.maxmergedspawners": "Maximum of merged spawners",
+  "menu.compactspawners.general.maxmergedspawners.description": "Decides the amount of spawners, which are allowed in a spawner block.",
+  "menu.compactspawners.general.maxstoredexp": "Maximum stored exp",
+  "menu.compactspawners.general.maxstoredexp.description": "Decides the amount of exp a spawner block should store.",
+  "menu.compactspawners.general.silkspawnerbreak": "Silk touch spawner break",
+  "menu.compactspawners.general.silkspawnerbreak.description": "Decides whether the spawner should be mineable with silk touch enchantment or not.",
+  "menu.compactspawners.general.requiredplayerrange": "Required players range",
+  "menu.compactspawners.general.requiredplayerrange.description": "Decides in which range a player should stand nearby a spawner to spawn mobs.",
+  "menu.compactspawners.general.mobsperspawner": "Mobs per spawner",
+  "menu.compactspawners.general.mobsperspawner.description": "Decides how many mobs there should 'spawn' per period"
+}

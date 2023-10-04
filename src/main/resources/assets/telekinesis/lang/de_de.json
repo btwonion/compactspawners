@@ -1,0 +1,14 @@
+{
+  "menu.compactspawners.name": "CompactSpawners",
+  "menu.compactspawners.general.name": "Allgemein",
+  "menu.compactspawners.general.maxmergedspawners": "Maximale Anzahl an gelagerten Spawnern",
+  "menu.compactspawners.general.maxmergedspawners.description": "Entscheidet, wie viele Spawner in einem Spawner gelagert werden können.",
+  "menu.compactspawners.general.maxstoredexp": "Maximale Anzahl an gelagerter Erfahrung",
+  "menu.compactspawners.general.maxstoredexp.description": "Entscheidet, wie viel Erfahrung in einem Spawner gelagert werden können.",
+  "menu.compactspawners.general.silkspawnerbreak": "Spawner Zerstörbarkeit mit Behutsamkeit",
+  "menu.compactspawners.general.silkspawnerbreak.description": "Entscheidet, ob man mit Behutsamkeit einen Spawner abbauen kann.",
+  "menu.compactspawners.general.requiredplayerrange": "Benötigte Spieler Entfernung",
+  "menu.compactspawners.general.requiredplayerrange.description": "Entscheidet, in welchem Umkreis Spieler sich befinden müssen, damit der Spawner funktioniert.",
+  "menu.compactspawners.general.mobsperspawner": "Mobs pro Spawner",
+  "menu.compactspawners.general.mobsperspawner.description": "Entscheidet, wie viele Mobs pro Spawner pro Periode 'spawnen' sollen"
+}
