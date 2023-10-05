@@ -40,7 +40,7 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.89.3+$mcVersion")
     modImplementation("net.fabricmc:fabric-language-kotlin:1.10.10+kotlin.1.9.10")
     modImplementation("dev.isxander.yacl:yet-another-config-lib-fabric:3.0.3+1.20")
-    modApi("com.terraformersmc:modmenu:6.2.0")
+    modApi("com.terraformersmc:modmenu:8.0.0")
 }
 
 tasks {
