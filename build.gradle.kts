@@ -81,7 +81,7 @@ tasks {
         kotlinOptions.jvmTarget = "17"
     }
 }
-val changelogFile: Path = rootDir.toPath().resolve("changelogs/fabric-$version.md")
+val changelogFile: Path = rootDir.toPath().resolve("changelogs/$version.md")
 val changelogText = if (changelogFile.notExists()) "" else changelogFile.readText()
 
 modrinth {
