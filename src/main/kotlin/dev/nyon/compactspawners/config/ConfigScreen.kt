@@ -39,7 +39,7 @@ fun generateGeneralCategory(): ConfigCategory = ConfigCategory.createBuilder().n
     .option(
         Option.createBuilder<Int>().name(Component.translatable("menu.compactspawners.general.requiredplayerrange"))
             .description(OptionDescription.of(Component.translatable("menu.compactspawners.general.requiredplayerrange.description")))
-            .binding(config.requiredPlayerRange, { config.requiredPlayerRange }, { config.requiredPlayerRange = it })
+            .binding(config.requiredPlayerDistance, { config.requiredPlayerDistance }, { config.requiredPlayerDistance = it })
             .controller { IntegerFieldControllerBuilder.create(it) }.build()
     )
     .option(

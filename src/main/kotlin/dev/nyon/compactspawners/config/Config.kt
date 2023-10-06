@@ -14,7 +14,7 @@ data class Config(
     var maxMergedSpawners: Int = -1,
     var maxStoredExp: Int = -1,
     var silkBreakSpawners: Boolean = true,
-    var requiredPlayerRange: Int = 32,
+    var requiredPlayerDistance: Int = 32,
     var mobsPerSpawner: Int = 4
 )
 

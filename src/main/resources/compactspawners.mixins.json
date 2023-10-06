@@ -7,16 +7,21 @@
     "BaseSpawnerAccessor",
     "BaseSpawnerMixin",
     "BlockItemMixin",
-    "ItemMixin",
     "MinecraftServerMixin",
+    "MineshaftPiecesMixin",
     "MobAccessor",
-    "SpawnerBlockEntityMixin",
-    "SpawnerBlockMixin"
+    "MonsterRoomFeatureMixin",
+    "NetherFortressPiecesMixin",
+    "SpawnEggItemMixin",
+    "SpawnerBlockMixin",
+    "StrongholdPiecesMixin",
+    "UseOnContextAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
+    "BlockEntityRenderersMixin",
     "MinecraftMixin"
   ]
 }
