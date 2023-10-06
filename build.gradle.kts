@@ -86,7 +86,7 @@ val changelogText = if (changelogFile.notExists()) "" else changelogFile.readTex
 
 modrinth {
     token.set(findProperty("modrinth.token")?.toString())
-    projectId.set("LLfA8jAD")
+    projectId.set("KRVzVd0T")
     versionNumber.set(project.version.toString())
     versionName.set(project.version.toString())
     versionType.set("release")
