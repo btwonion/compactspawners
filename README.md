@@ -29,8 +29,11 @@ configuration menu in ModMenu.
   "mobsPerSpawner": 4  // defines how many mobs should spawn per spawner per period
 }
 ```
-
 </details>
+
+## Recipes
+As long as Minecraft doesn't intent to add nbt crafting there will be not recipes provided by this mod. I hope, that I 
+can add configurable spawner recipes in the future.
 
 ## Other
 
