@@ -9,6 +9,7 @@ import kotlin.io.path.exists
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 
+// original version
 @Serializable
 data class Config(
     var maxMergedSpawners: Int = -1,
