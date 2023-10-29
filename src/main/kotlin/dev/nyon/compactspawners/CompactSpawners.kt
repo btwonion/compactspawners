@@ -1,21 +1,18 @@
 package dev.nyon.compactspawners
 
-import dev.nyon.compactspawners.config.loadConfig
-import dev.nyon.compactspawners.config.saveConfig
+import dev.nyon.compactspawners.config.Config
+import dev.nyon.compactspawners.config.migrate
 import dev.nyon.compactspawners.spawner.CompactSpawnerEntity
-import kotlinx.serialization.json.Json
+import dev.nyon.konfig.config.config
+import dev.nyon.konfig.config.loadConfig
+import dev.nyon.konfig.config.saveConfig
 import net.fabricmc.api.ModInitializer
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.entity.BlockEntityType
-
-
-val json = Json {
-    prettyPrint = true
-    encodeDefaults = true
-}
+import dev.nyon.compactspawners.config.config as internalConfig
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 object CompactSpawners : ModInitializer {
@@ -28,10 +25,11 @@ object CompactSpawners : ModInitializer {
     )
 
     override fun onInitialize() {
-        loadConfig()
+        config(MOD_ID, 1, Config()) { jsonTree, version -> migrate(jsonTree, version) }
+        internalConfig = loadConfig<Config>() ?: error("No config settings provided to load config!")
     }
 
     fun shutdown() {
-        saveConfig()
+        saveConfig(internalConfig)
     }
 }
