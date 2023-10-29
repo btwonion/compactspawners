@@ -28,20 +28,23 @@ repositories {
     maven("https://maven.terraformersmc.com")
     maven("https://maven.parchmentmc.org")
     maven("https://maven.isxander.dev/releases")
+    maven("https://repo.nyon.dev/releases")
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
 }
 
 dependencies {
     minecraft("com.mojang:minecraft:$mcVersion")
     mappings(loom.layered {
-        parchment("org.parchmentmc.data:parchment-1.20.1:2023.09.03@zip")
+        parchment("org.parchmentmc.data:parchment-1.20.2:2023.10.22@zip")
         officialMojangMappings()
     })
-    modImplementation("net.fabricmc:fabric-loader:0.14.22")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.89.3+$mcVersion")
+    modImplementation("net.fabricmc:fabric-loader:0.14.24")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.90.4+$mcVersion")
     modImplementation("net.fabricmc:fabric-language-kotlin:1.10.10+kotlin.1.9.10")
-    modImplementation("dev.isxander.yacl:yet-another-config-lib-fabric:3.0.3+1.20")
+    modImplementation("dev.isxander.yacl:yet-another-config-lib-fabric:3.2.1+$mcVersion")
     include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.2.0-rc.5")!!)!!)
     modApi("com.terraformersmc:modmenu:8.0.0")
+    include("dev.nyon:konfig:1.0.1-$mcVersion")
 }
 
 tasks {
