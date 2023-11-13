@@ -3,15 +3,14 @@
 > Fabric/Quilt mod, that adds automatic killing and drop storing in spawners
 
 This mod changes the behaviour of the spawner to a fully automated killing machine. This way mobs don't spawn in the
-world and the
-spawn in the world and the drops and experience are stored in the spawner.
+world the drops and experience are stored in the spawner.
 
 ## Interactions
 
-- Hitting or clicking the spawner will transfer the experience to your character.
+- Hitting or clicking on the spawner will transfer the experience to your character.
 - Clicking on the spawner will open the drop menu.
 - Clicking on a spawner with a spawner will add more spawners to the hosting spawner. This will increase the kill rate.
-- A hopper under the spawner will suck up all mob drops
+- A hopper below the spawner will suck up all mob drops.
 
 ## Config
 
@@ -32,8 +31,8 @@ configuration menu in ModMenu.
 </details>
 
 ## Recipes
-As long as Minecraft doesn't intent to add nbt crafting there will be not recipes provided by this mod. I hope, that I 
-can add configurable spawner recipes in the future.
+As long as Minecraft doesn't intend to add nbt crafting, there will be no recipes provided by this mod. I hope to be able to add 
+configurable spawner recipes in the future.
 
 ## Other
 
