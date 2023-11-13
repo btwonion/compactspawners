@@ -4,6 +4,8 @@ import dev.nyon.compactspawners.spawner.CompactSpawnerEntity;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -81,6 +83,8 @@ public abstract class BaseSpawnerMixin {
 
             spawnerEntity.handleNewExp(mob.getExperienceReward(), serverLevel, pos);
         }
+
+        serverLevel.playSound(null, pos, SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.BLOCKS, 3, 0.75f);
 
         spawnerEntity.setChanged();
         ci.cancel();
