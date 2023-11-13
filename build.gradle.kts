@@ -16,7 +16,7 @@ plugins {
 }
 
 group = "dev.nyon"
-val majorVersion = "1.0.1"
+val majorVersion = "1.1.0"
 val mcVersion = "1.20.2"
 version = "$majorVersion-$mcVersion"
 description = "Fabric/Quilt mod which allows you to use spawners as a fully automatic farm"
