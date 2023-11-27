@@ -25,7 +25,8 @@ configuration menu in ModMenu.
   "maxStoredExp": -1, // the maximum amount of experience stored in a hosting spawner
   "silkBreakSpawners": true,  // decides whether you can break a spawner with silk touch
   "requiredPlayerDistance": 32,  // the minimum player distance for the spawner to work
-  "mobsPerSpawner": 4  // defines how many mobs should spawn per spawner per period
+  "mobsPerSpawner": 4,  // defines how many mobs should spawn per spawner per period
+  "luck": 1.0 // defines with what value of luck an entity should be killed inside a spawner
 }
 ```
 </details>

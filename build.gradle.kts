@@ -5,18 +5,18 @@ import kotlin.io.path.notExists
 import kotlin.io.path.readText
 
 plugins {
-    kotlin("jvm") version "1.9.10"
-    kotlin("plugin.serialization") version "1.9.10"
+    kotlin("jvm") version "1.9.21"
+    kotlin("plugin.serialization") version "1.9.21"
     id("fabric-loom") version "1.4-SNAPSHOT"
 
-    id("com.modrinth.minotaur") version "2.8.4"
+    id("com.modrinth.minotaur") version "2.8.5"
     id("com.github.breadmoirai.github-release") version "2.4.1"
     `maven-publish`
     signing
 }
 
 group = "dev.nyon"
-val majorVersion = "1.1.0"
+val majorVersion = "1.1.1"
 val mcVersion = "1.20.2"
 version = "$majorVersion-$mcVersion"
 description = "Fabric/Quilt mod which allows you to use spawners as a fully automatic farm"
@@ -38,11 +38,11 @@ dependencies {
         parchment("org.parchmentmc.data:parchment-1.20.2:2023.10.22@zip")
         officialMojangMappings()
     })
-    modImplementation("net.fabricmc:fabric-loader:0.14.24")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.90.4+$mcVersion")
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.10.10+kotlin.1.9.10")
+    modImplementation("net.fabricmc:fabric-loader:0.14.25")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.91.1+$mcVersion")
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.10.15+kotlin.1.9.21")
     modImplementation("dev.isxander.yacl:yet-another-config-lib-fabric:3.2.1+$mcVersion")
-    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.2.0-rc.5")!!)!!)
+    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.2.1")!!)!!)
     modApi("com.terraformersmc:modmenu:8.0.0")
     include(modImplementation("dev.nyon:konfig:1.0.4-$mcVersion")!!)
 }
