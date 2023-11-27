@@ -3,6 +3,7 @@ package dev.nyon.compactspawners.mixins;
 import dev.nyon.compactspawners.spawner.CompactSpawnerEntity;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -76,15 +77,25 @@ public abstract class BaseSpawnerMixin {
             }
 
             FakePlayer player = FakePlayer.get(serverLevel);
-            mob.setLastHurtByPlayer(player);
-            LootTable lootTable = serverLevel.getServer().getLootData().getLootTable(mob.getLootTable());
-            LootParams lootParams = new LootParams.Builder(serverLevel).withParameter(LootContextParams.ORIGIN, player.getEyePosition()).withParameter(LootContextParams.THIS_ENTITY, player).withParameter(LootContextParams.DAMAGE_SOURCE, serverLevel.damageSources().playerAttack(player)).create(LootContextParamSets.ENTITY);
+
+            ResourceLocation resourceLocation = mob.getLootTable();
+            LootTable lootTable = mob.level().getServer().getLootData().getLootTable(resourceLocation);
+            LootParams.Builder builder = new LootParams.Builder((ServerLevel)mob.level())
+                .withParameter(LootContextParams.THIS_ENTITY, mob)
+                .withParameter(LootContextParams.ORIGIN, mob.position())
+                .withParameter(LootContextParams.DAMAGE_SOURCE, player.damageSources().playerAttack(player))
+                .withParameter(LootContextParams.LAST_DAMAGE_PLAYER, player)
+                .withOptionalParameter(LootContextParams.KILLER_ENTITY, player)
+                .withOptionalParameter(LootContextParams.DIRECT_KILLER_ENTITY, player)
+                .withLuck(getConfig().getLuck());
+
+            LootParams lootParams = builder.create(LootContextParamSets.ENTITY);
             lootTable.getRandomItems(lootParams, ((MobAccessor) mob).invokeGetLootTableSeed(), item -> spawnerEntity.handleNewDrop(item, serverLevel, pos));
 
             spawnerEntity.handleNewExp(mob.getExperienceReward(), serverLevel, pos);
         }
 
-        serverLevel.playSound(null, pos, SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.BLOCKS, 3, 0.75f);
+        serverLevel.playSound(null, pos, SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.BLOCKS, 1, 0.75f);
 
         spawnerEntity.setChanged();
         ci.cancel();

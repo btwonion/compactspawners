@@ -10,5 +10,7 @@
   "menu.compactspawners.general.requiredplayerrange": "Benötigte Spieler Entfernung",
   "menu.compactspawners.general.requiredplayerrange.description": "Entscheidet, in welchem Umkreis Spieler sich befinden müssen, damit der Spawner funktioniert.",
   "menu.compactspawners.general.mobsperspawner": "Mobs pro Spawner",
-  "menu.compactspawners.general.mobsperspawner.description": "Entscheidet, wie viele Mobs pro Spawner pro Periode 'spawnen' sollen"
+  "menu.compactspawners.general.mobsperspawner.description": "Entscheidet, wie viele Mobs pro Spawner pro Periode 'spawnen' sollen",
+  "menu.compactspawners.general.luck": "Glück",
+  "menu.compactspawners.general.luck.description": "Gebe an welche Stufe an Glück angewandt werden soll beim Töten des Monsters."
 }

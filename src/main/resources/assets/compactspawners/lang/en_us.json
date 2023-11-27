@@ -10,5 +10,7 @@
   "menu.compactspawners.general.requiredplayerrange": "Required players range",
   "menu.compactspawners.general.requiredplayerrange.description": "Decides in which range a player should stand nearby a spawner to spawn mobs.",
   "menu.compactspawners.general.mobsperspawner": "Mobs per spawner",
-  "menu.compactspawners.general.mobsperspawner.description": "Decides how many mobs there should 'spawn' per period"
+  "menu.compactspawners.general.mobsperspawner.description": "Decides how many mobs there should 'spawn' per period",
+  "menu.compactspawners.general.luck": "Luck",
+  "menu.compactspawners.general.luck.description": "Defines with what value of luck an entity should be killed inside a spawner."
 }

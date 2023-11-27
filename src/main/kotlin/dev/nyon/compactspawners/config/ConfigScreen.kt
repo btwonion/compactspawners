@@ -6,6 +6,7 @@ import dev.isxander.yacl3.api.ConfigCategory
 import dev.isxander.yacl3.api.Option
 import dev.isxander.yacl3.api.OptionDescription
 import dev.isxander.yacl3.api.YetAnotherConfigLib
+import dev.isxander.yacl3.api.controller.FloatFieldControllerBuilder
 import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder
 import dev.nyon.konfig.config.saveConfig
@@ -54,5 +55,11 @@ fun generateGeneralCategory(): ConfigCategory =
                 .description(OptionDescription.of(Component.translatable("menu.compactspawners.general.mobsperspawner.description")))
                 .binding(config.mobsPerSpawner, { config.mobsPerSpawner }, { config.mobsPerSpawner = it })
                 .controller { IntegerFieldControllerBuilder.create(it) }.build()
+        )
+        .option(
+            Option.createBuilder<Float>().name(Component.translatable("menu.compactspawners.general.luck"))
+                .description(OptionDescription.of(Component.translatable("menu.compactspawners.general.luck.description")))
+                .binding(config.luck, { config.luck }, { config.luck = it })
+                .controller { FloatFieldControllerBuilder.create(it) }.build()
         )
         .build()

@@ -25,7 +25,7 @@ object CompactSpawners : ModInitializer {
     )
 
     override fun onInitialize() {
-        config(MOD_ID, 1, Config()) { jsonTree, version -> migrate(jsonTree, version) }
+        config(MOD_ID, 2, Config()) { jsonTree, version -> migrate(jsonTree, version) }
         internalConfig = loadConfig<Config>() ?: error("No config settings provided to load config!")
     }
 
