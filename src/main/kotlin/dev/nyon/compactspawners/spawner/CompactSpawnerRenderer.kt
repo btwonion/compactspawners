@@ -9,11 +9,12 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher
 import net.minecraft.util.Mth
+import net.minecraft.world.entity.Entity
 import kotlin.math.max
 
 @Environment(EnvType.CLIENT)
 class CompactSpawnerRenderer(context: BlockEntityRendererProvider.Context) : BlockEntityRenderer<CompactSpawnerEntity> {
-    private val entityRenderer: EntityRenderDispatcher = context.entityRenderer
+    private val entityRenderer: EntityRenderDispatcher? = null
 
     override fun render(
         blockEntity: CompactSpawnerEntity,
@@ -23,33 +24,53 @@ class CompactSpawnerRenderer(context: BlockEntityRendererProvider.Context) : Blo
         packedLight: Int,
         packedOverlay: Int
     ) {
+        val level = blockEntity.level
+        if (level != null) {
+            val baseSpawner = blockEntity.spawner
+            val entity = baseSpawner.getOrCreateDisplayEntity(level, blockEntity.blockPos)
+            if (entity != null && this.entityRenderer != null) {
+                renderEntityInSpawner(
+                    partialTick, poseStack, buffer, packedLight, entity,
+                    this.entityRenderer, baseSpawner.getoSpin(), baseSpawner.spin
+                )
+            }
+        }
+    }
+
+    private fun renderEntityInSpawner(
+        f: Float,
+        poseStack: PoseStack,
+        multiBufferSource: MultiBufferSource?,
+        i: Int,
+        entity: Entity,
+        entityRenderDispatcher: EntityRenderDispatcher,
+        d: Double,
+        e: Double
+    ) {
         poseStack.pushPose()
         poseStack.translate(0.5f, 0.0f, 0.5f)
-        val baseSpawner = blockEntity.spawner
-        val entity = baseSpawner.getOrCreateDisplayEntity(
-            blockEntity.level!!, blockEntity.level!!.getRandom(), blockEntity.blockPos
-        )
-        if (entity == null) {
-            poseStack.popPose()
-            return
+        var g = 0.53125f
+        val h = max(entity.bbWidth.toDouble(), entity.bbHeight.toDouble()).toFloat()
+        if (h.toDouble() > 1.0) {
+            g /= h
         }
 
-        var f = 0.53125f
-        val g = max(entity.bbWidth.toDouble(), entity.bbHeight.toDouble()).toFloat()
-        if (g.toDouble() > 1.0) f /= g
         poseStack.translate(0.0f, 0.4f, 0.0f)
-        poseStack.mulPose(
-            Axis.YP.rotationDegrees(
-                Mth.lerp(
-                    partialTick.toDouble(), baseSpawner.getoSpin(), baseSpawner.spin
-                ).toFloat() * 10.0f
-            )
-        )
+        poseStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(f.toDouble(), d, e).toFloat() * 10.0f))
         poseStack.translate(0.0f, -0.2f, 0.0f)
         poseStack.mulPose(Axis.XP.rotationDegrees(-30.0f))
-        poseStack.scale(f, f, f)
-        entityRenderer.render(entity, 0.0, 0.0, 0.0, 0.0f, partialTick, poseStack, buffer, packedLight)
-
+        poseStack.scale(g, g, g)
+        if (multiBufferSource != null) entityRenderDispatcher.render(
+            entity,
+            0.0,
+            0.0,
+            0.0,
+            0.0f,
+            f,
+            poseStack,
+            multiBufferSource,
+            i
+        )
         poseStack.popPose()
     }
 }

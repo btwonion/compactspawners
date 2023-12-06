@@ -26,6 +26,7 @@ public abstract class MonsterRoomFeatureMixin {
             target = "Lnet/minecraft/world/level/WorldGenLevel;getBlockEntity(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;"
         )
     )
+    @SuppressWarnings("unused")
     private BlockEntity redirectVanillaSpawnerInitiation(BlockEntity original, FeaturePlaceContext<NoneFeatureConfiguration> context) {
         if (original instanceof CompactSpawnerEntity compactSpawner)
             compactSpawner.setEntityId(randomEntityId(context.random()), context.random());
