@@ -9,15 +9,15 @@ plugins {
     kotlin("plugin.serialization") version "1.9.21"
     id("fabric-loom") version "1.4-SNAPSHOT"
 
-    id("com.modrinth.minotaur") version "2.8.5"
-    id("com.github.breadmoirai.github-release") version "2.4.1"
+    id("com.modrinth.minotaur") version "2.8.7"
+    id("com.github.breadmoirai.github-release") version "2.5.2"
     `maven-publish`
     signing
 }
 
 group = "dev.nyon"
 val majorVersion = "1.1.1"
-val mcVersion = "1.20.2"
+val mcVersion = "1.20.3"
 version = "$majorVersion-$mcVersion"
 description = "Fabric/Quilt mod which allows you to use spawners as a fully automatic farm"
 val authors = listOf("btwonion")
@@ -38,13 +38,13 @@ dependencies {
         parchment("org.parchmentmc.data:parchment-1.20.2:2023.10.22@zip")
         officialMojangMappings()
     })
-    modImplementation("net.fabricmc:fabric-loader:0.14.25")
+    implementation("org.vineflower:vineflower:1.9.3")
+    modImplementation("net.fabricmc:fabric-loader:0.15.0")
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.91.1+$mcVersion")
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.10.15+kotlin.1.9.21")
-    modImplementation("dev.isxander.yacl:yet-another-config-lib-fabric:3.2.1+$mcVersion")
-    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.2.1")!!)!!)
-    modApi("com.terraformersmc:modmenu:8.0.0")
-    include(modImplementation("dev.nyon:konfig:1.0.4-$mcVersion")!!)
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.10.16+kotlin.1.9.21")
+    modImplementation("dev.isxander.yacl:yet-another-config-lib-fabric:3.3.0-beta.1+$mcVersion")
+    modImplementation("com.terraformersmc:modmenu:9.0.0-pre.1")
+    include(modImplementation("dev.nyon:konfig:1.0.4-1.20.2")!!)
 }
 
 tasks {
@@ -112,12 +112,12 @@ githubRelease {
     token(findProperty("github.token")?.toString())
 
     val split = githubRepo.split("/")
-    owner(split[0])
-    repo(split[1])
-    releaseName(project.version.toString())
-    tagName(project.version.toString())
-    body(changelogText)
-    targetCommitish("master")
+    owner = split[0]
+    repo = split[1]
+    releaseName = project.version.toString()
+    tagName = project.version.toString()
+    body = changelogText
+    targetCommitish = "master"
     setReleaseAssets(tasks["remapJar"])
 }
 
