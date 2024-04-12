@@ -3,7 +3,7 @@ package dev.nyon.compactspawners.mixins;
 import dev.nyon.compactspawners.spawner.CompactSpawnerEntity;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -78,8 +78,8 @@ public abstract class BaseSpawnerMixin {
 
             FakePlayer player = FakePlayer.get(serverLevel);
 
-            ResourceLocation resourceLocation = mob.getLootTable();
-            LootTable lootTable = mob.level().getServer().getLootData().getLootTable(resourceLocation);
+            ResourceKey<LootTable> resourceLocation = mob.getLootTable();
+            LootTable lootTable = serverLevel.getServer().reloadableRegistries().getLootTable(resourceLocation);
             LootParams.Builder builder = new LootParams.Builder((ServerLevel)mob.level())
                 .withParameter(LootContextParams.THIS_ENTITY, mob)
                 .withParameter(LootContextParams.ORIGIN, mob.position())

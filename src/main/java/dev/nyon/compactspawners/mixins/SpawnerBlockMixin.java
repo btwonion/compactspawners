@@ -8,15 +8,17 @@ import dev.nyon.compactspawners.utils.ServerLevelExtensionsKt;
 import kotlin.ranges.IntRange;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -74,10 +76,11 @@ public class SpawnerBlockMixin extends BaseEntityBlock {
         if (!(level instanceof ServerLevel serverLevel)) return state;
 
         var spawnerEntity = (CompactSpawnerEntity) level.getBlockEntity(pos);
-        var spawnerItem = generateSpawnerItem(spawnerEntity.getSpawner());
+        var spawnerItem = new ItemStack(this);
+ //  generateSpawnerItem(spawnerEntity.getSpawner())
 
         spawnerEntity.getStoredDrops().forEach(item -> Block.popResource(level, pos, item));
-        if (EnchantmentHelper.hasSilkTouch(player.getMainHandItem())) {
+        if (EnchantmentHelper.hasSilkTouch(player.getMainHandItem()) && ConfigKt.getConfig().getSilkBreakSpawners()) {
             var stacks = spawnerEntity.getSpawnerCount() / 64;
             var singleItems = spawnerEntity.getSpawnerCount() - (stacks * 64);
 
@@ -109,36 +112,6 @@ public class SpawnerBlockMixin extends BaseEntityBlock {
         popExperience(level, pos, i);
     }
 
-    @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        var spawnerEntity = (CompactSpawnerEntity) level.getBlockEntity(pos);
-
-        SpawnData nextSpawnData = ((BaseSpawnerAccessor) spawnerEntity.getSpawner()).getNextSpawnData();
-        if (nextSpawnData == null || EntityType.by(nextSpawnData.getEntityToSpawn()).isEmpty()) {
-            spawnerEntity.setActivated(false);
-            return InteractionResult.FAIL;
-        }
-        spawnerEntity.setActivated(true);
-        var itemInHand = player.getItemInHand(hand);
-        if (
-            itemInHand.is(Items.SPAWNER)
-                && itemInHand.hasTag()
-                && itemInHand.getTag().getCompound("BlockEntityTag").getCompound("SpawnData").getCompound("entity").getString("id").equals(nextSpawnData.entityToSpawn().getString("id"))
-        ) {
-            var freeSlots = ConfigKt.getConfig().getMaxMergedSpawners() - spawnerEntity.getSpawnerCount();
-            if (ConfigKt.getConfig().getMaxMergedSpawners() == -1 || freeSlots >= itemInHand.getCount()) {
-                spawnerEntity.setSpawnerCount(spawnerEntity.getSpawnerCount() + itemInHand.getCount());
-                player.setItemInHand(hand, ItemStack.EMPTY);
-            } else {
-                spawnerEntity.setSpawnerCount(spawnerEntity.getSpawnerCount() + freeSlots);
-                player.setItemInHand(hand, itemInHand.copyWithCount(itemInHand.getCount() - freeSlots));
-            }
-            return InteractionResult.SUCCESS;
-        }
-
-        player.openMenu(spawnerEntity);
-        return InteractionResult.PASS;
-    }
 
     @Override
     public void attack(BlockState state, Level level, BlockPos pos, Player player) {
@@ -153,14 +126,12 @@ public class SpawnerBlockMixin extends BaseEntityBlock {
         var spawnerItem = new ItemStack(Items.SPAWNER);
         var spawnData = ((BaseSpawnerAccessor) baseSpawner).getNextSpawnData();
         if (spawnData == null) return spawnerItem;
-        var itemTag = spawnerItem.getOrCreateTag();
-        var blockEntityTag = new CompoundTag();
-        var spawnDataTag = new CompoundTag();
-        var entityTag = new CompoundTag();
-        entityTag.putString("id", spawnData.getEntityToSpawn().getString("id"));
-        spawnDataTag.put("entity", entityTag);
-        blockEntityTag.put("SpawnData", spawnDataTag);
-        itemTag.put("BlockEntityTag", blockEntityTag);
+        var itemTag = spawnerItem.getComponents().getOrDefault(DataComponents.CUSTOM_DATA, CustomData.of(new CompoundTag()));
+
+        var spawnDataCompound = SpawnData.CODEC.encodeStart(NbtOps.INSTANCE, spawnData).getOrThrow(string -> new IllegalStateException("Invalid SpawnData: " + string));
+        itemTag.update(tag -> {
+            tag.put("SpawnData", spawnDataCompound);
+        });
         return spawnerItem;
     }
 
@@ -179,5 +150,17 @@ public class SpawnerBlockMixin extends BaseEntityBlock {
     @Override
     public boolean isEnabled(FeatureFlagSet enabledFeatures) {
         return super.isEnabled(enabledFeatures);
+    }
+
+    @Override
+    protected @NotNull InteractionResult useWithoutItem(
+        BlockState blockState,
+        Level level,
+        BlockPos blockPos,
+        Player player,
+        BlockHitResult blockHitResult
+    ) {
+        player.openMenu((MenuProvider) level.getBlockEntity(blockPos));
+        return InteractionResult.SUCCESS;
     }
 }

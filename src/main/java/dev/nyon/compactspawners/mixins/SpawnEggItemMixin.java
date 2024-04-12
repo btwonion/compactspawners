@@ -2,7 +2,6 @@ package dev.nyon.compactspawners.mixins;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import dev.nyon.compactspawners.spawner.CompactSpawnerEntity;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.SpawnEggItem;
@@ -10,7 +9,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.gameevent.GameEvent;
-import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,7 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class SpawnEggItemMixin {
 
     @Shadow
-    public abstract EntityType<?> getType(@Nullable CompoundTag nbt);
+    @Final
+    private EntityType<?> defaultType;
 
     @Inject(
         method = "useOn",
@@ -39,8 +39,9 @@ public abstract class SpawnEggItemMixin {
         if (!blockState.is(Blocks.SPAWNER)) return;
         var blockEntity = level.getBlockEntity(pos);
         if (!(blockEntity instanceof CompactSpawnerEntity compactSpawnerEntity)) return;
+
         var itemStack = context.getItemInHand();
-        EntityType<?> entityType = getType(itemStack.getTag());
+        EntityType<?> entityType = defaultType;
         compactSpawnerEntity.setEntityId(entityType, level.getRandom());
         blockEntity.setChanged();
         level.sendBlockUpdated(pos, blockState, blockState, 3);

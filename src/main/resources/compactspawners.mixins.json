@@ -14,8 +14,7 @@
     "NetherFortressPiecesMixin",
     "SpawnEggItemMixin",
     "SpawnerBlockMixin",
-    "StrongholdPiecesMixin",
-    "UseOnContextAccessor"
+    "StrongholdPiecesMixin"
   ],
   "injectors": {
     "defaultRequire": 1

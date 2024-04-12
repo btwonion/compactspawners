@@ -1,13 +1,11 @@
 @file:Suppress("SpellCheckingInspection")
+
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.nio.file.Path
-import kotlin.io.path.notExists
-import kotlin.io.path.readText
 
 plugins {
-    kotlin("jvm") version "1.9.21"
-    kotlin("plugin.serialization") version "1.9.21"
-    id("fabric-loom") version "1.4-SNAPSHOT"
+    kotlin("jvm") version "1.9.23"
+    kotlin("plugin.serialization") version "1.9.23"
+    id("fabric-loom") version "1.6-SNAPSHOT"
 
     id("com.modrinth.minotaur") version "2.8.7"
     id("com.github.breadmoirai.github-release") version "2.5.2"
@@ -17,7 +15,7 @@ plugins {
 
 group = "dev.nyon"
 val majorVersion = "1.1.1"
-val mcVersion = "1.20.3"
+val mcVersion = "1.20.5-pre1"
 version = "$majorVersion-$mcVersion"
 description = "Fabric/Quilt mod which allows you to use spawners as a fully automatic farm"
 val authors = listOf("btwonion")
@@ -30,21 +28,24 @@ repositories {
     maven("https://maven.isxander.dev/releases")
     maven("https://repo.nyon.dev/releases")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://maven.isxander.dev/snapshots")
 }
 
 dependencies {
     minecraft("com.mojang:minecraft:$mcVersion")
-    mappings(loom.layered {
-        parchment("org.parchmentmc.data:parchment-1.20.2:2023.10.22@zip")
-        officialMojangMappings()
-    })
+    mappings(
+        loom.layered {
+            parchment("org.parchmentmc.data:parchment-1.20.4:2024.02.25@zip")
+            officialMojangMappings()
+        }
+    )
     implementation("org.vineflower:vineflower:1.9.3")
-    modImplementation("net.fabricmc:fabric-loader:0.15.0")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.91.1+$mcVersion")
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.10.16+kotlin.1.9.21")
-    modImplementation("dev.isxander.yacl:yet-another-config-lib-fabric:3.3.0-beta.1+$mcVersion")
-    modImplementation("com.terraformersmc:modmenu:9.0.0-pre.1")
-    include(modImplementation("dev.nyon:konfig:1.0.4-1.20.2")!!)
+    modImplementation("net.fabricmc:fabric-loader:0.15.10")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.96.15+1.20.5")
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.10.19+kotlin.1.9.23")
+    modImplementation("dev.isxander.yacl:yet-another-config-lib-fabric:3.3.2+1.20.4+update.1.20.5-SNAPSHOT+update.1.20.5-SNAPSHOT")
+    modImplementation("com.terraformersmc:modmenu:10.0.0-alpha.3")
+    include(modImplementation("dev.nyon:konfig:2.0.1-1.20.4")!!)
 }
 
 tasks {
@@ -79,15 +80,18 @@ tasks {
     }
 
     withType<JavaCompile> {
-        options.release.set(17)
+        options.release.set(21)
     }
 
     withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "17"
+        kotlinOptions.jvmTarget = "21"
     }
 }
-val changelogFile: Path = rootDir.toPath().resolve("changelogs/$version.md")
-val changelogText = if (changelogFile.notExists()) "" else changelogFile.readText()
+val changelogText =
+    buildString {
+        append("# v${project.version}\n")
+        file("changelog.md").readText().also { append(it) }
+    }
 
 modrinth {
     token.set(findProperty("modrinth.token")?.toString())
@@ -96,7 +100,7 @@ modrinth {
     versionName.set(project.version.toString())
     versionType.set("release")
     uploadFile.set(tasks["remapJar"])
-    gameVersions.set(listOf("1.20.2"))
+    gameVersions.set(listOf("1.20.5"))
     loaders.set(listOf("fabric", "quilt"))
     dependencies {
         required.project("fabric-api")

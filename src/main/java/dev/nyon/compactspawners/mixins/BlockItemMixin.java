@@ -31,10 +31,12 @@ public class BlockItemMixin {
         cancellable = true
     )
     private void invokeSpawnerOnCompactSpawnerAction(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir) {
-        if (!(block instanceof SpawnerBlock spawnerBlock)) return;
+        if (!(block instanceof SpawnerBlock)) return;
         var pos = context.getClickedPos();
-        if (context.getLevel().getBlockEntity(pos) == null) return;
-        var compactSpawnerResult = spawnerBlock.use(context.getLevel().getBlockState(pos), context.getLevel(), pos, context.getPlayer(), context.getHand(), ((UseOnContextAccessor) context).getBHitResult());
+        var entity = context.getLevel().getBlockEntity(pos);
+        if (!(entity instanceof CompactSpawnerEntity compactSpawner)) return;
+
+        var compactSpawnerResult = compactSpawner.use(context.getLevel(), pos, context.getPlayer(), context.getHand());
         cir.setReturnValue(compactSpawnerResult);
     }
 

@@ -30,7 +30,7 @@ public abstract class BlockEntityRenderersMixin {
         at = @At("HEAD")
     )
     private static void addSpawnerRendererForCompactSpawner(BlockEntityRendererProvider.Context context, CallbackInfoReturnable<Map<BlockEntityType<?>, BlockEntityRenderer<?>>> cir) {
-        register(CompactSpawners.INSTANCE.getBlockEntityType(), CompactSpawnerRenderer::new);
+        register(CompactSpawners.INSTANCE.getBlockEntityType(), context1 -> new CompactSpawnerRenderer(context));
         PROVIDERS.remove(BlockEntityType.MOB_SPAWNER);
     }
 }
