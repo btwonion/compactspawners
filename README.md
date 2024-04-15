@@ -5,6 +5,10 @@
 This mod changes the behaviour of the spawner to a fully automated killing machine. This way mobs don't spawn in the
 world the drops and experience are stored in the spawner.
 
+# Deprecation
+This project is archived from 15/04/2024 on. This is caused by the bad implementation of this project and my lack of time. 
+It is possible I revive this project at a later time. Feel free to fork or reimplement this project.
+
 ## Interactions
 
 - Hitting or clicking on the spawner will transfer the experience to your character.
