@@ -7,23 +7,18 @@ import dev.nyon.compactspawners.spawner.CompactSpawnerEntity;
 import dev.nyon.compactspawners.utils.ServerLevelExtensionsKt;
 import kotlin.ranges.IntRange;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BaseSpawner;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SpawnerBlock;
@@ -31,7 +26,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEventListener;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -64,20 +58,13 @@ public class SpawnerBlockMixin extends BaseEntityBlock {
         });
     }
 
-    @Nullable
-    @Override
-    public <T extends BlockEntity> GameEventListener getListener(ServerLevel level, T blockEntity) {
-        return super.getListener(level, blockEntity);
-    }
-
     @Override
     public @NotNull BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         super.playerWillDestroy(level, pos, state, player);
         if (!(level instanceof ServerLevel serverLevel)) return state;
 
         var spawnerEntity = (CompactSpawnerEntity) level.getBlockEntity(pos);
-        var spawnerItem = new ItemStack(this);
- //  generateSpawnerItem(spawnerEntity.getSpawner())
+        var spawnerItem = generateSpawnerItem(spawnerEntity.getSpawner());
 
         spawnerEntity.getStoredDrops().forEach(item -> Block.popResource(level, pos, item));
         if (EnchantmentHelper.hasSilkTouch(player.getMainHandItem()) && ConfigKt.getConfig().getSilkBreakSpawners()) {
@@ -126,30 +113,17 @@ public class SpawnerBlockMixin extends BaseEntityBlock {
         var spawnerItem = new ItemStack(Items.SPAWNER);
         var spawnData = ((BaseSpawnerAccessor) baseSpawner).getNextSpawnData();
         if (spawnData == null) return spawnerItem;
-        var itemTag = spawnerItem.getComponents().getOrDefault(DataComponents.CUSTOM_DATA, CustomData.of(new CompoundTag()));
 
-        var spawnDataCompound = SpawnData.CODEC.encodeStart(NbtOps.INSTANCE, spawnData).getOrThrow(string -> new IllegalStateException("Invalid SpawnData: " + string));
-        itemTag.update(tag -> {
-            tag.put("SpawnData", spawnDataCompound);
-        });
+        var rootTag = new CompoundTag();
+        var spawnDataTag = new CompoundTag();
+        var entityTag = new CompoundTag();
+        entityTag.putString("id", spawnData.entityToSpawn().getString("id"));
+        spawnDataTag.put("entity", entityTag);
+        rootTag.put("SpawnData", spawnDataTag);
+
+        spawnerItem.set(DataComponents.BLOCK_ENTITY_DATA, CustomData.of(rootTag));
+
         return spawnerItem;
-    }
-
-    @Override
-    public BlockState getAppearance(
-        BlockState state,
-        BlockAndTintGetter renderView,
-        BlockPos pos,
-        Direction side,
-        @Nullable BlockState sourceState,
-        @Nullable BlockPos sourcePos
-    ) {
-        return super.getAppearance(state, renderView, pos, side, sourceState, sourcePos);
-    }
-
-    @Override
-    public boolean isEnabled(FeatureFlagSet enabledFeatures) {
-        return super.isEnabled(enabledFeatures);
     }
 
     @Override

@@ -6,22 +6,17 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SpawnerBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BlockItem.class)
-public class BlockItemMixin {
+public abstract class BlockItemMixin {
 
     @Shadow
-    @Final
-    @Deprecated
-    private Block block;
+    public abstract Block getBlock();
 
     @Inject(
         method = "useOn",
@@ -31,23 +26,12 @@ public class BlockItemMixin {
         cancellable = true
     )
     private void invokeSpawnerOnCompactSpawnerAction(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir) {
-        if (!(block instanceof SpawnerBlock)) return;
+        if (!(getBlock() instanceof SpawnerBlock)) return;
         var pos = context.getClickedPos();
         var entity = context.getLevel().getBlockEntity(pos);
         if (!(entity instanceof CompactSpawnerEntity compactSpawner)) return;
 
         var compactSpawnerResult = compactSpawner.use(context.getLevel(), pos, context.getPlayer(), context.getHand());
         cir.setReturnValue(compactSpawnerResult);
-    }
-
-    @Redirect(
-        method = "updateCustomBlockEntityTag(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/item/ItemStack;)Z",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/level/block/entity/BlockEntity;onlyOpCanSetNbt()Z"
-        )
-    )
-    private static boolean writeTagToBlockEntity(BlockEntity instance) {
-        return instance.onlyOpCanSetNbt() && !(instance instanceof CompactSpawnerEntity);
     }
 }
